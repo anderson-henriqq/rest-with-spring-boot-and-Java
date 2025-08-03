@@ -1,8 +1,13 @@
 package com.clinicavet.petcare.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.clinicavet.petcare.DTO.AtendimentoDTO;
+import com.clinicavet.petcare.repository.specification.AtendimentoSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.clinicavet.petcare.model.Atendimento;
@@ -15,6 +20,30 @@ public class AtendimentoService {
 
     public AtendimentoService(AtendimentoRepository atendimentoRepository) {
         this.atendimentoRepository = atendimentoRepository;
+    }
+
+    public List<AtendimentoDTO> buscarComFiltros(LocalDate dataInicio, LocalDate dataFim, String petNome, String vetNome) {
+        Specification<Atendimento> spec = Specification.where(null);
+
+        spec = spec.and(AtendimentoSpecification.comDataMaiorOuIgualA(dataInicio));
+        spec = spec.and(AtendimentoSpecification.comDataMenorOuIgualA(dataFim));
+        spec = spec.and(AtendimentoSpecification.comPetNome(petNome));
+        spec = spec.and(AtendimentoSpecification.comVeterinarioNome(vetNome));
+
+        List<Atendimento> atendimentos = atendimentoRepository.findAll(spec);
+
+        return atendimentos.stream()
+                .map(this::converterParaDTO)
+                .collect(Collectors.toList());
+    }
+    private AtendimentoDTO converterParaDTO(Atendimento atendimento) {
+        return new AtendimentoDTO(
+            atendimento.getId(),
+            atendimento.getData(),
+            atendimento.getDescricao(),
+            atendimento.getPet() != null ? atendimento.getPet().getNome() : "Pet não informado",
+            atendimento.getVeterinario() != null ? atendimento.getVeterinario().getNome() : "Veterinário não informado"
+        );
     }
 
     public Atendimento salvar(Atendimento atendimento) {
