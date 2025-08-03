@@ -1,6 +1,7 @@
 package com.clinicavet.petcare.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Pet {
@@ -13,6 +14,12 @@ public class Pet {
     private Integer idade;
     private String tipo;
     private String raca;
+    
+    // Relacionamento com Tutor
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tutor_id")
+    @JsonBackReference
+    private Tutor tutor;
 
     // Construtores
     public Pet() {}
@@ -22,6 +29,14 @@ public class Pet {
         this.idade = idade;
         this.tipo = tipo;
         this.raca = raca;
+    }
+    
+    public Pet(String nome, Integer idade, String tipo, String raca, Tutor tutor) {
+        this.nome = nome;
+        this.idade = idade;
+        this.tipo = tipo;
+        this.raca = raca;
+        this.tutor = tutor;
     }
 
     // Getters e Setters
@@ -45,4 +60,8 @@ public class Pet {
     public String getRaca() { return raca; }
 
     public void setRaca(String raca) { this.raca = raca; }
+    
+    public Tutor getTutor() { return tutor; }
+    
+    public void setTutor(Tutor tutor) { this.tutor = tutor; }
 }
