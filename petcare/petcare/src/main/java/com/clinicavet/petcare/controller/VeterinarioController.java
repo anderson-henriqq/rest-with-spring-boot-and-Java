@@ -24,14 +24,9 @@ public class VeterinarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Veterinario>> listarTodos(
-            @RequestParam(required = false) String nome,
-            @RequestParam(required = false) String especialidade) {
-        
-        // Se nenhum filtro for passado, ele lista todos.
-        // Se filtros forem passados, ele usa o novo método do service.
-        return ResponseEntity.ok(veterinarioService.buscarComFiltros(nome, especialidade));
-        }
+    public ResponseEntity<List<Veterinario>> listarTodos() {
+        return ResponseEntity.ok(veterinarioService.listarTodos());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Veterinario> buscarPorId(@PathVariable Long id) {
