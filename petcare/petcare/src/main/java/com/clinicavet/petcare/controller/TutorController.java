@@ -141,10 +141,28 @@ public class TutorController {
         return ResponseEntity.ok(tutores);
     }
     
-    // POST /api/tutores/filtro - filtros via JSON body
-    @PostMapping("/filtro")
-    public ResponseEntity<List<Tutor>> buscarComFiltroDTO(@RequestBody TutorFilterDTO filtros) {
-        List<Tutor> tutores = tutorService.buscarComFiltros(filtros);
+    // Endpoints usando Specification para consultas avançadas
+    
+    // GET /api/tutores/pet-nome/Rex - tutores que têm pet com nome específico
+    @GetMapping("/pet-nome/{nomePet}")
+    public ResponseEntity<List<Tutor>> buscarPorNomePet(@PathVariable String nomePet) {
+        List<Tutor> tutores = tutorService.buscarPorNomePet(nomePet);
+        return ResponseEntity.ok(tutores);
+    }
+    
+    // GET /api/tutores/pet-raca/Labrador - tutores que têm pet de raça específica
+    @GetMapping("/pet-raca/{raca}")
+    public ResponseEntity<List<Tutor>> buscarPorRacaPet(@PathVariable String raca) {
+        List<Tutor> tutores = tutorService.buscarPorRacaPet(raca);
+        return ResponseEntity.ok(tutores);
+    }
+    
+    // GET /api/tutores/pet-idade?min=2&max=5 - tutores com pets entre idades
+    @GetMapping("/pet-idade")
+    public ResponseEntity<List<Tutor>> buscarPorIdadePets(
+            @RequestParam(required = false) Integer min,
+            @RequestParam(required = false) Integer max) {
+        List<Tutor> tutores = tutorService.buscarPorIdadePets(min, max);
         return ResponseEntity.ok(tutores);
     }
 }

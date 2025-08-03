@@ -24,7 +24,6 @@ public class TutorFilterDTO {
         this.comPets = comPets;
     }
     
-    // Getters e Setters
     public String getNome() {
         return nome;
     }
@@ -65,11 +64,6 @@ public class TutorFilterDTO {
                (contato != null && !contato.trim().isEmpty()) ||
                (tipoPet != null && !tipoPet.trim().isEmpty()) ||
                comPets != null;
-    }
-    
-    // Verifica se todos os filtros estão vazios
-    public boolean isEmpty() {
-        return !hasFilters();
     }
     
     @Override
