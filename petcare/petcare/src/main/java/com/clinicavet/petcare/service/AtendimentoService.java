@@ -23,12 +23,10 @@ public class AtendimentoService {
     }
 
     public List<AtendimentoDTO> buscarComFiltros(LocalDate dataInicio, LocalDate dataFim, String petNome, String vetNome) {
-        Specification<Atendimento> spec = Specification.where(null);
-
-        spec = spec.and(AtendimentoSpecification.comDataMaiorOuIgualA(dataInicio));
-        spec = spec.and(AtendimentoSpecification.comDataMenorOuIgualA(dataFim));
-        spec = spec.and(AtendimentoSpecification.comPetNome(petNome));
-        spec = spec.and(AtendimentoSpecification.comVeterinarioNome(vetNome));
+        Specification<Atendimento> spec = AtendimentoSpecification.comDataMaiorOuIgualA(dataInicio)
+            .and(AtendimentoSpecification.comDataMenorOuIgualA(dataFim))
+            .and(AtendimentoSpecification.comPetNome(petNome))
+            .and(AtendimentoSpecification.comVeterinarioNome(vetNome));
 
         List<Atendimento> atendimentos = atendimentoRepository.findAll(spec);
 
