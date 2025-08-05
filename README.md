@@ -1,49 +1,23 @@
 
-# 🐾 Trabalho Prático - Consultas Avançadas no Sistema PetCare
+# 🐾 Sistema PetCare - Gestão de Clínicas Veterinárias
 
 ## 📚 Sobre o Projeto
 
-O **PetCare** é um sistema de gestão de clínicas veterinárias construído colaborativamente pela turma de **Análise e Desenvolvimento de Sistemas (ADS) 2023.2** do IFRN - Instituto Federal do Rio Grande do Norte, durante a disciplina de **Administração de Banco de Dados**.
+O **PetCare** é o **back-end** de um sistema de gestão de clínicas veterinárias, desenvolvido em **Java** com o framework **Spring Boot** e utilizando **PostgreSQL** como banco de dados relacional. A documentação da API é fornecida via **Swagger**, facilitando o teste e a visualização dos endpoints.
 
-A proposta da disciplina foi desenvolver um sistema completo, onde **cada grupo ficou responsável por implementar uma funcionalidade específica** e preparar um **trabalho prático (TP)** para que os demais colegas pudessem implementar e consolidar os conhecimentos em banco de dados e boas práticas de desenvolvimento.
+Este sistema foi construído colaborativamente pela turma de **Análise e Desenvolvimento de Sistemas (ADS) 2023.2** do IFRN - Instituto Federal do Rio Grande do Norte, durante a disciplina de **Administração de Banco de Dados**.
 
-Este repositório contém o trabalho prático da equipe composta por **Anderson Henrique**, **Giovanna**, **Laura Luna**, **Luiz** e **Samuel**. Nossa contribuição foi a implementação do módulo de **Internamento de Pets**.
+A proposta da disciplina foi desenvolver um sistema completo, onde cada grupo ficou responsável por implementar uma funcionalidade específica, utilizando boas práticas de desenvolvimento, arquitetura em camadas e integração com banco de dados.
 
-Com o crescimento do sistema **PetCare**, a clínica passou a oferecer internações para pets. Este trabalho prático tem como objetivo implementar a funcionalidade de **internamento**, utilizando conceitos de **consultas avançadas** e aplicando os padrões arquiteturais já adotados no sistema.
-
----
+Este repositório contém o sistema desenvolvido pela equipe composta por **Anderson Henrique**, **Giovanna**, **Laura Luna**, **Luiz** e **Samuel**.
 
 ---
-## 📌 O que são Consultas Avançadas?
 
-Consultas avançadas são operações de leitura no banco de dados que vão além do simples `findAll()` ou `findById()`. Elas permitem **filtrar, agrupar, ordenar ou relacionar dados** de forma mais específica e poderosa.
-
-### ✅ Por que usar consultas avançadas?
-- Quando queremos **filtrar** informações específicas (ex: internações de um pet específico).
-- Quando precisamos **trazer dados combinando múltiplas entidades**.
-- Quando desejamos retornar **somente campos selecionados** (via DTOs), e não o objeto completo.
-
-### 🧪 Exemplo prático com Spring Data JPA
-
-#### Suponha que queremos buscar internações de um pet pelo seu ID:
-
-**Repository:**
-
-```java
-@Query("SELECT new com.exemplo.dto.InternamentoDTO(i.id, i.motivo, i.dataEntrada, i.dataSaida, i.pet.nome, i.tutor.nome) " +
-       "FROM Internamento i WHERE i.pet.id = :petId")
-List<InternamentoDTO> findByPetId(@Param("petId") Long petId);
-```
-
-**Explicação:**
-- A anotação `@Query` permite escrever uma consulta personalizada em JPQL.
-- A instrução `new InternamentoDTO(...)` cria diretamente objetos DTO com os campos desejados.
-- Utilizamos `JOIN` implícito para acessar campos de entidades relacionadas (`i.pet.nome`, `i.tutor.nome`).
-
-Essa abordagem melhora a performance e deixa o retorno mais leve, pois só os campos necessários são buscados no banco.
 ## 💡 Objetivo
 
-Implementar a entidade `Internamento` com as camadas:
+Desenvolver todas as entidades e funcionalidades necessárias para o funcionamento completo do sistema PetCare. Isso inclui a implementação de diversas entidades como Pet, Tutor, Veterinário, Clínica, Atendimento, Medicamento, Internamento, entre outras.
+
+Cada funcionalidade foi estruturada seguindo os princípios da arquitetura em camadas, utilizando:
 
 - **Model**
 - **Repository**
@@ -51,54 +25,7 @@ Implementar a entidade `Internamento` com as camadas:
 - **Controller**
 - **DTO (Response)**
 
-E criar um **endpoint de consulta avançada** para listar internações com base no **ID do pet**.
-
----
-
-## 🏥 Entidade: Internamento
-
-Representa o registro de pets internados na clínica. A entidade deve conter os seguintes campos:
-
-```java
-private Long id;
-private LocalDate dataEntrada;
-private LocalDate dataSaida;
-private String motivo;
-
-@ManyToOne
-private Pet pet;
-
-@ManyToOne
-private Tutor tutor;
-
-@ManyToOne
-private Clinica clinica;
-```
-
----
-
-## 🔍 Endpoint Avançado
-
-Criar o seguinte endpoint na API:
-
-```http
-GET /api/internamentos/pet/{id}
-```
-
-Esse endpoint deve retornar uma lista de internações associadas ao **ID do pet** informado.
-
-### 🧾 DTO de Resposta
-
-```java
-public class InternamentoDTO {
-    private Long id;
-    private String motivo;
-    private LocalDate dataEntrada;
-    private LocalDate dataSaida;
-    private String nomePet;
-    private String nomeTutor;
-}
-```
+Além disso, foi adotado o uso de boas práticas como a documentação com Swagger e a padronização dos endpoints REST.
 
 ---
 
@@ -172,22 +99,6 @@ Ou no Windows:
 ```cmd
 mvnw.cmd spring-boot:run
 ```
-
----
-
-## 🧪 Testando o Endpoint
-
-Abra o navegador ou o Postman e acesse:
-
-> [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
-Busque pela rota:
-
-```http
-GET /api/internamentos/pet/{id}
-```
-
-Substitua `{id}` pelo ID de um pet existente para visualizar suas internações.
 
 ---
 
